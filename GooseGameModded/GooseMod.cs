@@ -10,7 +10,7 @@ namespace GooseGameModded
     class GooseMod : MonoBehaviour
     {
         // Alloc vars
-        const string VERSIONSTR = "1.5";
+        const string VERSIONSTR = "1.5.1";
         
         string sceneName = "undefined";
 
@@ -26,8 +26,9 @@ namespace GooseGameModded
         Rigidbody gooseRB = null; // Goose Rigidbody
 
         Goose gooseGooseComponent = null;
-
-        bool gooseCheatActive = false;
+        // Cheats
+        bool cheatFastRun = false;
+        bool cheatGeeseCanFly = false;
 
 
         public void OnGUI() // Draw-Step
@@ -83,7 +84,7 @@ namespace GooseGameModded
                 dumpGameObjectsOld();           
             }
 
-            // Toggle goose cheat mode
+            // Toggle goose run mode
             if(Input.GetKeyDown(KeyCode.Alpha2))
             {
                 if(!gooseFound) // If no goose is set, return
@@ -92,7 +93,18 @@ namespace GooseGameModded
                 }
 
                 // Toggle goose cheat mode
-                gooseCheatActive = !gooseCheatActive;
+                cheatFastRun = !cheatFastRun;
+            }
+            // Toggle goose fly mode
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                if (!gooseFound) // If no goose is set, return
+                {
+                    return;
+                }
+
+                // Toggle goose cheat mode
+                cheatGeeseCanFly = !cheatGeeseCanFly;
             }
 
             // Call various scripts
@@ -112,14 +124,23 @@ namespace GooseGameModded
         }
         public void updateGooseShenanigans() // This does the funny hehe
         {
+            if(!gooseFound)
+            {
+                return;
+            }
+
             // Cheat mode + goose found = chaos
-            if(gooseCheatActive && gooseFound)
+            if(cheatFastRun )
             {
                 if(gooseGooseComponent.isRunning) // Deja-Goose, I've just been in this place before
                 {
                     gooseGooseComponent.mover.currentSpeed = 5;
-                }
-                
+                }                
+            }
+
+            if(cheatGeeseCanFly) // Make the goose float
+            {
+                goose.transform.position = new Vector3(goosePosition.x, 3, goosePosition.z);
             }
         }
 
