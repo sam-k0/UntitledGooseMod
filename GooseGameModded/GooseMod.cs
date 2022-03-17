@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System.Windows.Forms;
 
 namespace GooseGameModded
 {
@@ -29,18 +30,25 @@ namespace GooseGameModded
         // Cheats
         bool cheatFastRun = false;
         bool cheatGeeseCanFly = false;
+        bool cheatBigGoose = false;
 
 
         public void OnGUI() // Draw-Step
         {
             // show current scene
-            GUI.Label(new Rect(0f, 0f, 200f, 200f), "UntitledGooseMod" + VERSIONSTR
+            GUI.Label(new Rect(0f, 0f, 200f, 500f), "UntitledGooseMod" + VERSIONSTR
                                                     + "\n| Scene: " + sceneName + "| Goose found: " + Convert.ToString(gooseFound)
                                                     + "\n| Goose X: " + goosePosition.x + " Y: " + goosePosition.y + " Z: " + goosePosition.z);
 
             // Show FPS
-            GUI.Label(new Rect(0f, 60f, 200f, 120f), "Performance: " + Convert.ToString(1.0f / Time.deltaTime));
+            GUI.Label(new Rect(0f, 200f, 300f, 120f), "Performance: " + Convert.ToString(1.0f / Time.deltaTime));
 
+            // Controls
+            GUI.Label(new Rect(0f, 300f, 700f, 500f), "Controls: Press 0 to initialize\n" +
+                "[1] Dump Data\n" +
+                "[2] Speedrun\n" +
+                "[3] Geese can fly\n" +
+                "[4] Big Goose");
         }
 
         public void Start() // On-Create
@@ -102,12 +110,49 @@ namespace GooseGameModded
                 {
                     return;
                 }
-
                 // Toggle goose cheat mode
                 cheatGeeseCanFly = !cheatGeeseCanFly;
             }
+            // Big goose
+            if(Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                if (!gooseFound) // If no goose is set, return
+                {
+                    return;
+                }
+                cheatBigGoose = !cheatBigGoose;
+            }
 
+            if(Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                if(!gooseFound){ return; }
+
+                GameObject g = GameObject.Find("gardener");
+                g.GetComponent<Gardener>().brain.target = null;
+            }
+
+            if(Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                foreach (GameObject obj in Resources.FindObjectsOfTypeAll<GameObject>())
+                {
+                    foreach (MonoBehaviour comp in obj.GetComponents<MonoBehaviour>())
+                    {
+                        if(comp.GetType().Name == "Prop")
+                        {
+                            obj.transform.position = new Vector3(goose.transform.position.x, goose.transform.position.y , goose.transform.position.z);
+                        }
+
+                        
+                    }
+                }
+            }
+
+            if(Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                Form1 form1 = new Form1();
+            }
             // Call various scripts
+            updateGooseVariables();
             updateGooseShenanigans();
         }
 
@@ -130,7 +175,7 @@ namespace GooseGameModded
             }
 
             // Cheat mode + goose found = chaos
-            if(cheatFastRun )
+            if(cheatFastRun)
             {
                 if(gooseGooseComponent.isRunning) // Deja-Goose, I've just been in this place before
                 {
@@ -138,10 +183,12 @@ namespace GooseGameModded
                 }                
             }
 
+            // Floating
             if(cheatGeeseCanFly) // Make the goose float
             {
-                goose.transform.position = new Vector3(goosePosition.x, 3, goosePosition.z);
+                goose.transform.position = new Vector3(goosePosition.x,5, goosePosition.z);
             }
+
         }
 
         #region Debugging

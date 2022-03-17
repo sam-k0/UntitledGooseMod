@@ -15,6 +15,12 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Unity\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.VisualStudio.15.0">
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\System.Windows.Forms.VisualStudio.15.0.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>Unity\Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
